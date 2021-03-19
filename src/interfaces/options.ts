@@ -1,34 +1,42 @@
 export interface AuthenticateOptions {
-  username: string
-  password: string
+  username: string;
+  password: string;
+  userAgent?: string;
 }
 
 export interface FollowerFollowingOptions {
-  userId?: string,
-  limit?: number,
-  page?: number
+  userId?: string;
+  limit?: number;
+  page?: number;
 }
 
 export interface RideOptions {
-  rideId: string,
+  rideId: string;
+}
+
+export interface RideFriendsOptions {
+  rideId: string;
+  limit?: number;
+  page?: number;
+  joins?: string;
 }
 
 export interface RideDetailsOptions {
-  rideId: string,
+  rideId: string;
 }
 
 export interface WorkoutOptions {
-  workoutId: string,
+  workoutId: string;
 }
 
 export interface WorkoutPerformanceGraphOptions {
-  workoutId: string,
-  everyN?: number
+  workoutId: string;
+  everyN?: number;
 }
 
 export interface WorkoutsOptions {
-  userId?: string,
-  limit?: number,
-  page?: number,
-  joins?: string,
+  userId?: string;
+  limit?: number;
+  page?: number;
+  joins?: string;
 }
