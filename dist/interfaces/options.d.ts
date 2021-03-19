@@ -1,6 +1,7 @@
 export interface AuthenticateOptions {
     username: string;
     password: string;
+    userAgent?: string;
 }
 export interface FollowerFollowingOptions {
     userId?: string;
@@ -9,6 +10,12 @@ export interface FollowerFollowingOptions {
 }
 export interface RideOptions {
     rideId: string;
+}
+export interface RideFriendsOptions {
+    rideId: string;
+    limit?: number;
+    page?: number;
+    joins?: string;
 }
 export interface RideDetailsOptions {
     rideId: string;

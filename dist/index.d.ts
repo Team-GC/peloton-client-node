@@ -1,5 +1,5 @@
-import { FollowerFollowingResponse, MeResponse, RideDetailsResponse, RideResponse, UserResponse, WorkoutPerformanceGraphResponse, WorkoutResponse, WorkoutsResponse } from './interfaces/responses';
-import { AuthenticateOptions, FollowerFollowingOptions, RideDetailsOptions, RideOptions, WorkoutOptions, WorkoutPerformanceGraphOptions, WorkoutsOptions } from './interfaces/options';
+import { FollowerFollowingResponse, MeResponse, RideDetailsResponse, RideResponse, UserResponse, WorkoutPerformanceGraphResponse, WorkoutResponse, WorkoutsResponse } from "./interfaces/responses";
+import { AuthenticateOptions, FollowerFollowingOptions, RideDetailsOptions, RideOptions, WorkoutOptions, WorkoutPerformanceGraphOptions, WorkoutsOptions } from "./interfaces/options";
 declare function authenticate(options: AuthenticateOptions): Promise<void>;
 declare function me(): Promise<MeResponse>;
 interface UserOptions {
