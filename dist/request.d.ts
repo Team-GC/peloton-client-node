@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { IncomingHttpHeaders } from 'http';
+import { IncomingHttpHeaders } from "http";
 interface RequestResponse {
     headers: IncomingHttpHeaders;
     status: number;

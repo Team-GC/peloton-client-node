@@ -1,11 +1,12 @@
-import { IncomingHttpHeaders, IncomingMessage } from 'http';
-import https = require('https');
-import urlLib = require('url');
+import { IncomingHttpHeaders, IncomingMessage } from "http";
+import https = require("https");
+import urlLib = require("url");
+import axios from "axios";
 
 interface RequestResponse {
-  headers: IncomingHttpHeaders
-  status: number
-  data: any,
+  headers: IncomingHttpHeaders;
+  status: number;
+  data: any;
 }
 
 /**
@@ -13,14 +14,21 @@ interface RequestResponse {
  * @param {String} url - the URL to get
  * @return {Object} the result of the get request
  */
-function get(url: string, headers: Record<string, string | string[]>): Promise<RequestResponse> {
+function get(
+  url: string,
+  headers: Record<string, string | string[]>
+): Promise<RequestResponse> {
   return new Promise((resolve, reject) => {
     const parsedUrl = urlLib.parse(url);
     const options = {
       hostname: parsedUrl.host,
       path: parsedUrl.path,
-      method: 'GET',
-      headers,
+      method: "GET",
+      headers: {
+        ...headers,
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+      },
     };
 
     https
@@ -29,13 +37,13 @@ function get(url: string, headers: Record<string, string | string[]>): Promise<R
           status: res.statusCode,
           headers: res.headers,
         };
-        let data = '';
+        let data = "";
 
-        res.on('data', (d: string) => {
+        res.on("data", (d: string) => {
           data += d;
         });
 
-        res.on('end', () => {
+        res.on("end", () => {
           const jsonData = JSON.parse(data);
           resolve({
             ...response,
@@ -43,39 +51,43 @@ function get(url: string, headers: Record<string, string | string[]>): Promise<R
           });
         });
       })
-      .on('error', reject)
+      .on("error", reject)
       .end();
-  })
+  });
 }
 
-function post(url: string, body: Record<string, unknown>): Promise<RequestResponse> {
+function post(
+  url: string,
+  body: Record<string, unknown>
+): Promise<RequestResponse> {
   return new Promise((resolve, reject) => {
     const parsedUrl = urlLib.parse(url);
     const stringBody = JSON.stringify(body);
     const options = {
       hostname: parsedUrl.host,
       path: parsedUrl.path,
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': stringBody.length
-      }
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+        "Content-Type": "application/json",
+        "Content-Length": stringBody.length,
+      },
     };
-
 
     https
       .request(options, (res: IncomingMessage) => {
         const response = {
           status: res.statusCode,
           headers: res.headers,
-        }
-        let data = '';
+        };
+        let data = "";
 
-        res.on('data', (d: string) => {
+        res.on("data", (d: string) => {
           data += d;
         });
 
-        res.on('end', () => {
+        res.on("end", () => {
           const jsonData = JSON.parse(data);
           return resolve({
             ...response,
@@ -83,9 +95,9 @@ function post(url: string, body: Record<string, unknown>): Promise<RequestRespon
           });
         });
       })
-      .on('error', reject)
+      .on("error", reject)
       .end(stringBody);
-  })
+  });
 }
 
 const request = {
