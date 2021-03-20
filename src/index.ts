@@ -72,6 +72,7 @@ function _verifyIsLoggedIn() {
  * @throws {Error} if the user is not logged in
  */
 function setToken(token: string): void {
+  clientVariables.loggedIn = true;
   clientVariables.cookieString = token;
 }
 

@@ -66,6 +66,7 @@ function _verifyIsLoggedIn() {
     }
 }
 function setToken(token) {
+    clientVariables.loggedIn = true;
     clientVariables.cookieString = token;
 }
 function getToken() {
