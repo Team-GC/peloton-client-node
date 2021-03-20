@@ -76,6 +76,14 @@ function setToken(token: string) {
 }
 
 /**
+ * Verifies that the user is logged in by checking the clientVariables.loggedIn status.
+ * @throws {Error} if the user is not logged in
+ */
+function getToken() {
+  return clientVariables.cookieString;
+}
+
+/**
  * Authenticates the given user
  * @param {AuthenticationOptions} options - options used to authenticate
  */
@@ -333,6 +341,7 @@ async function rideDetails(
 export const peloton = {
   validSession,
   setToken,
+  getToken,
   authenticate,
   me,
   user,
