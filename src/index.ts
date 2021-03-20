@@ -343,6 +343,7 @@ export const peloton = {
   validSession,
   setToken,
   getToken,
+  rideFriends,
   authenticate,
   me,
   user,

@@ -324,6 +324,7 @@ exports.peloton = {
     validSession: validSession,
     setToken: setToken,
     getToken: getToken,
+    rideFriends: rideFriends,
     authenticate: authenticate,
     me: me,
     user: user,
