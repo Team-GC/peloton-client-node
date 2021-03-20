@@ -28,6 +28,7 @@ import {
 interface ClientVariables {
   loggedIn: boolean;
   cookie?: Array<string>;
+  cookieString?: string;
   userId?: string;
   userAgent?: string;
 }
@@ -67,10 +68,32 @@ function _verifyIsLoggedIn() {
 }
 
 /**
+ * Verifies that the user is logged in by checking the clientVariables.loggedIn status.
+ * @throws {Error} if the user is not logged in
+ */
+function setToken(token: string) {
+  clientVariables.cookieString = token;
+}
+
+/**
  * Authenticates the given user
  * @param {AuthenticationOptions} options - options used to authenticate
  */
-async function authenticate(options: AuthenticateOptions) {
+async function validSesion(): Promise<any> {
+  _verifyIsLoggedIn();
+  const sessionValid = await request.get(_pelotonAuthUrlFor("/check_session"), {
+    cookie: clientVariables.cookieString,
+    "User-Agent": clientVariables.userAgent,
+  });
+
+  return sessionValid;
+}
+
+/**
+ * Authenticates the given user
+ * @param {AuthenticationOptions} options - options used to authenticate
+ */
+async function authenticate(options: AuthenticateOptions): Promise<any> {
   const loginRes = await request.post(_pelotonAuthUrlFor("/login"), {
     username_or_email: options.username,
     password: options.password,
@@ -79,9 +102,16 @@ async function authenticate(options: AuthenticateOptions) {
   clientVariables.userId = loginRes.data.user_id;
   clientVariables.loggedIn = true;
 
+  clientVariables.cookieString = clientVariables.cookie[1];
+
   if (options.userAgent) {
     clientVariables.userAgent = options.userAgent;
   }
+
+  return {
+    cookies: clientVariables.cookie[1],
+    ...loginRes,
+  };
 }
 
 /**
@@ -91,7 +121,7 @@ async function authenticate(options: AuthenticateOptions) {
 async function me(): Promise<MeResponse> {
   _verifyIsLoggedIn();
   const meRes = await request.get(_pelotonApiUrlFor("/me"), {
-    cookie: clientVariables.cookie,
+    cookie: clientVariables.cookieString,
     "User-Agent": clientVariables.userAgent,
   });
   return meRes.data;
@@ -113,7 +143,7 @@ async function user(
   _verifyIsLoggedIn();
   const userId = options.userId || clientVariables.userId;
   const userRes = await request.get(_pelotonApiUrlFor(`/user/${userId}`), {
-    cookie: clientVariables.cookie,
+    cookie: clientVariables.cookieString,
     "User-Agent": clientVariables.userAgent,
   });
   return userRes.data;
@@ -137,7 +167,7 @@ async function followers(
   const followersRes = await request.get(
     _pelotonApiUrlFor(`/user/${userId}/followers?${workoutQueryParams}`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -161,7 +191,7 @@ async function following(
   const followingRes = await request.get(
     _pelotonApiUrlFor(`/user/${userId}/following?${workoutQueryParams}`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -186,7 +216,7 @@ async function workouts(
   const workoutsRes = await request.get(
     _pelotonApiUrlFor(`/user/${userId}/workouts?${workoutQueryParams}`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -205,7 +235,7 @@ async function workout(options: WorkoutOptions): Promise<WorkoutResponse> {
   const workoutRes = await request.get(
     _pelotonApiUrlFor(`/workout/${workoutId}`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -228,7 +258,7 @@ async function workoutPerformanceGraph(
   const workoutPerformanceGraphRes = await request.get(
     _pelotonApiUrlFor(`/workout/${workoutId}/performance_graph?${queryString}`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -246,7 +276,7 @@ async function ride(options: RideOptions): Promise<RideResponse> {
   const { rideId } = options;
 
   const rideRes = await request.get(_pelotonApiUrlFor(`/ride/${rideId}`), {
-    cookie: clientVariables.cookie,
+    cookie: clientVariables.cookieString,
     "User-Agent": clientVariables.userAgent,
   });
   return rideRes.data;
@@ -272,7 +302,7 @@ async function rideFriends(options: RideFriendsOptions): Promise<any> {
       `/ride/${rideId}/recent_following_workouts?${rideFriendsQuery}`
     ),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -293,7 +323,7 @@ async function rideDetails(
   const rideRes = await request.get(
     _pelotonApiUrlFor(`/ride/${rideId}/details`),
     {
-      cookie: clientVariables.cookie,
+      cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
     }
   );
@@ -301,6 +331,8 @@ async function rideDetails(
 }
 
 export const peloton = {
+  validSesion,
+  setToken,
   authenticate,
   me,
   user,
