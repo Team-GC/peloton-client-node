@@ -1,6 +1,9 @@
 import { FollowerFollowingResponse, MeResponse, RideDetailsResponse, RideResponse, UserResponse, WorkoutPerformanceGraphResponse, WorkoutResponse, WorkoutsResponse } from "./interfaces/responses";
 import { AuthenticateOptions, FollowerFollowingOptions, RideDetailsOptions, RideOptions, WorkoutOptions, WorkoutPerformanceGraphOptions, WorkoutsOptions } from "./interfaces/options";
-declare function authenticate(options: AuthenticateOptions): Promise<void>;
+declare function setToken(token: string): void;
+declare function getToken(): string;
+declare function validSession(): Promise<any>;
+declare function authenticate(options: AuthenticateOptions): Promise<any>;
 declare function me(): Promise<MeResponse>;
 interface UserOptions {
     userId?: string;
@@ -14,6 +17,9 @@ declare function workoutPerformanceGraph(options: WorkoutPerformanceGraphOptions
 declare function ride(options: RideOptions): Promise<RideResponse>;
 declare function rideDetails(options: RideDetailsOptions): Promise<RideDetailsResponse>;
 export declare const peloton: {
+    validSession: typeof validSession;
+    setToken: typeof setToken;
+    getToken: typeof getToken;
     authenticate: typeof authenticate;
     me: typeof me;
     user: typeof user;

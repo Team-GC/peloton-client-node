@@ -71,7 +71,7 @@ function _verifyIsLoggedIn() {
  * Verifies that the user is logged in by checking the clientVariables.loggedIn status.
  * @throws {Error} if the user is not logged in
  */
-function setToken(token: string) {
+function setToken(token: string): void {
   clientVariables.cookieString = token;
 }
 
@@ -79,7 +79,7 @@ function setToken(token: string) {
  * Verifies that the user is logged in by checking the clientVariables.loggedIn status.
  * @throws {Error} if the user is not logged in
  */
-function getToken() {
+function getToken(): string {
   return clientVariables.cookieString;
 }
 

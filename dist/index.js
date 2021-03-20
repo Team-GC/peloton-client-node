@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,6 +65,30 @@ function _verifyIsLoggedIn() {
         throw new Error("Must authenticate before making API call.");
     }
 }
+function setToken(token) {
+    clientVariables.cookieString = token;
+}
+function getToken() {
+    return clientVariables.cookieString;
+}
+function validSession() {
+    return __awaiter(this, void 0, void 0, function () {
+        var sessionValid;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _verifyIsLoggedIn();
+                    return [4, request_1["default"].get(_pelotonAuthUrlFor("/check_session"), {
+                            cookie: clientVariables.cookieString,
+                            "User-Agent": clientVariables.userAgent
+                        })];
+                case 1:
+                    sessionValid = _a.sent();
+                    return [2, sessionValid];
+            }
+        });
+    });
+}
 function authenticate(options) {
     return __awaiter(this, void 0, void 0, function () {
         var loginRes;
@@ -68,10 +103,11 @@ function authenticate(options) {
                     clientVariables.cookie = loginRes.headers["set-cookie"];
                     clientVariables.userId = loginRes.data.user_id;
                     clientVariables.loggedIn = true;
+                    clientVariables.cookieString = clientVariables.cookie[1];
                     if (options.userAgent) {
                         clientVariables.userAgent = options.userAgent;
                     }
-                    return [2];
+                    return [2, __assign({ cookies: clientVariables.cookie[1] }, loginRes)];
             }
         });
     });
@@ -84,7 +120,7 @@ function me() {
                 case 0:
                     _verifyIsLoggedIn();
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/me"), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -104,7 +140,7 @@ function user(options) {
                     _verifyIsLoggedIn();
                     userId = options.userId || clientVariables.userId;
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -126,7 +162,7 @@ function followers(options) {
                     page = options.page || 0;
                     workoutQueryParams = querystring.stringify({ limit: limit, page: page });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId + "/followers?" + workoutQueryParams), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -148,7 +184,7 @@ function following(options) {
                     page = options.page || 0;
                     workoutQueryParams = querystring.stringify({ limit: limit, page: page });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId + "/following?" + workoutQueryParams), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -172,7 +208,7 @@ function workouts(options) {
                     page = options.page || 0;
                     workoutQueryParams = querystring.stringify({ joins: joins, limit: limit, page: page });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId + "/workouts?" + workoutQueryParams), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -191,7 +227,7 @@ function workout(options) {
                     _verifyIsLoggedIn();
                     workoutId = options.workoutId;
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/workout/" + workoutId), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -212,7 +248,7 @@ function workoutPerformanceGraph(options) {
                     every_n = options.everyN || 5;
                     queryString = querystring.stringify({ every_n: every_n });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/workout/" + workoutId + "/performance_graph?" + queryString), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -231,7 +267,7 @@ function ride(options) {
                     _verifyIsLoggedIn();
                     rideId = options.rideId;
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/ride/" + rideId), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -254,7 +290,7 @@ function rideFriends(options) {
                     page = options.page || 0;
                     rideFriendsQuery = querystring.stringify({ joins: joins, limit: limit, page: page });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/ride/" + rideId + "/recent_following_workouts?" + rideFriendsQuery), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -273,7 +309,7 @@ function rideDetails(options) {
                     _verifyIsLoggedIn();
                     rideId = options.rideId;
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/ride/" + rideId + "/details"), {
-                            cookie: clientVariables.cookie,
+                            cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
                 case 1:
@@ -284,6 +320,9 @@ function rideDetails(options) {
     });
 }
 exports.peloton = {
+    validSession: validSession,
+    setToken: setToken,
+    getToken: getToken,
     authenticate: authenticate,
     me: me,
     user: user,
