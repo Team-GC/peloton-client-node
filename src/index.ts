@@ -79,7 +79,7 @@ function setToken(token: string) {
  * Authenticates the given user
  * @param {AuthenticationOptions} options - options used to authenticate
  */
-async function validSesion(): Promise<any> {
+async function validSession(): Promise<any> {
   _verifyIsLoggedIn();
   const sessionValid = await request.get(_pelotonAuthUrlFor("/check_session"), {
     cookie: clientVariables.cookieString,
@@ -331,7 +331,7 @@ async function rideDetails(
 }
 
 export const peloton = {
-  validSesion,
+  validSession,
   setToken,
   authenticate,
   me,
