@@ -221,13 +221,15 @@ function workouts(options) {
 }
 function workout(options) {
     return __awaiter(this, void 0, void 0, function () {
-        var workoutId, workoutRes;
+        var workoutId, joins, workoutQuery, workoutRes;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _verifyIsLoggedIn();
                     workoutId = options.workoutId;
-                    return [4, request_1["default"].get(_pelotonApiUrlFor("/workout/" + workoutId), {
+                    joins = options.joins || "user";
+                    workoutQuery = querystring.stringify({ joins: joins });
+                    return [4, request_1["default"].get(_pelotonApiUrlFor("/workout/" + workoutId + "?" + workoutQuery), {
                             cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent
                         })];
