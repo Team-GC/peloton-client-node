@@ -27,6 +27,7 @@ export interface RideDetailsOptions {
 
 export interface WorkoutOptions {
   workoutId: string;
+  joins?: string;
 }
 
 export interface WorkoutPerformanceGraphOptions {

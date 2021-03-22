@@ -239,10 +239,13 @@ async function workouts(
  */
 async function workout(options: WorkoutOptions): Promise<WorkoutResponse> {
   _verifyIsLoggedIn();
-  const { workoutId } = options;
+  const workoutId = options.workoutId;
+  const joins = options.joins || "user";
+
+  const workoutQuery = querystring.stringify({ joins });
 
   const workoutRes = await request.get(
-    _pelotonApiUrlFor(`/workout/${workoutId}`),
+    _pelotonApiUrlFor(`/workout/${workoutId}?${workoutQuery}`),
     {
       cookie: clientVariables.cookieString,
       "User-Agent": clientVariables.userAgent,
