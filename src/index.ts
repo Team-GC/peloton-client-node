@@ -111,7 +111,7 @@ async function authenticate(options: AuthenticateOptions): Promise<any> {
   clientVariables.userId = loginRes.data.user_id;
   clientVariables.loggedIn = true;
 
-  clientVariables.cookieString = clientVariables.cookie[1];
+  clientVariables.cookieString = clientVariables.cookie[0];
 
   if (options.userAgent) {
     clientVariables.userAgent = options.userAgent;
