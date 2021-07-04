@@ -64,7 +64,8 @@ function post(
       path: parsedUrl.path,
       method: "POST",
       headers: {
-        "User-Agent": "PeloFriends 1.0.0",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36",
         "Content-Type": "application/json",
         "Content-Length": stringBody.length,
       },
