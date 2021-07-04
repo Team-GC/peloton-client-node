@@ -104,7 +104,7 @@ function authenticate(options) {
                     clientVariables.cookie = loginRes.headers["set-cookie"];
                     clientVariables.userId = loginRes.data.user_id;
                     clientVariables.loggedIn = true;
-                    clientVariables.cookieString = clientVariables.cookie[1];
+                    clientVariables.cookieString = clientVariables.cookie[0];
                     if (options.userAgent) {
                         clientVariables.userAgent = options.userAgent;
                     }
