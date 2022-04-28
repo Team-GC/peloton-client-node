@@ -198,7 +198,7 @@ function following(options) {
 function workouts(options) {
     if (options === void 0) { options = {}; }
     return __awaiter(this, void 0, void 0, function () {
-        var userId, joins, limit, page, workoutQueryParams, workoutsRes;
+        var userId, joins, limit, page, to, from, workoutQueryParams, workoutsRes;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -207,7 +207,15 @@ function workouts(options) {
                     joins = options.joins || "ride";
                     limit = options.limit || 10;
                     page = options.page || 0;
-                    workoutQueryParams = querystring.stringify({ joins: joins, limit: limit, page: page });
+                    to = options.to || null;
+                    from = options.from || null;
+                    workoutQueryParams = querystring.stringify({
+                        joins: joins,
+                        limit: limit,
+                        page: page,
+                        to: to,
+                        from: from
+                    });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId + "/workouts?" + workoutQueryParams), {
                             cookie: clientVariables.cookieString,
                             "User-Agent": clientVariables.userAgent

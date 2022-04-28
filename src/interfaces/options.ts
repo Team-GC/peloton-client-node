@@ -38,6 +38,8 @@ export interface WorkoutPerformanceGraphOptions {
 export interface WorkoutsOptions {
   userId?: string;
   limit?: number;
+  to?: string;
+  from?: string;
   page?: number;
   joins?: string;
 }
