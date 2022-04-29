@@ -222,6 +222,8 @@ async function workouts(
   const page = options.page || 0;
   const to = options.to || null;
   const from = options.from || null;
+  const stats_to = options.stats_to || null;
+  const stats_from = options.stats_from || null;
 
   const workoutQueryParams = querystring.stringify({
     joins,
@@ -229,6 +231,8 @@ async function workouts(
     page,
     to,
     from,
+    stats_to,
+    stats_from,
   });
   const workoutsRes = await request.get(
     _pelotonApiUrlFor(`/user/${userId}/workouts?${workoutQueryParams}`),

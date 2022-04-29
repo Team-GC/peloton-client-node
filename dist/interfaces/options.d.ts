@@ -33,6 +33,8 @@ export interface WorkoutsOptions {
     limit?: number;
     to?: string;
     from?: string;
+    stats_to?: string;
+    stats_from?: string;
     page?: number;
     joins?: string;
 }

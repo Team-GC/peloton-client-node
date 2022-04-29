@@ -198,7 +198,7 @@ function following(options) {
 function workouts(options) {
     if (options === void 0) { options = {}; }
     return __awaiter(this, void 0, void 0, function () {
-        var userId, joins, limit, page, to, from, workoutQueryParams, workoutsRes;
+        var userId, joins, limit, page, to, from, stats_to, stats_from, workoutQueryParams, workoutsRes;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -209,12 +209,16 @@ function workouts(options) {
                     page = options.page || 0;
                     to = options.to || null;
                     from = options.from || null;
+                    stats_to = options.stats_to || null;
+                    stats_from = options.stats_from || null;
                     workoutQueryParams = querystring.stringify({
                         joins: joins,
                         limit: limit,
                         page: page,
                         to: to,
-                        from: from
+                        from: from,
+                        stats_to: stats_to,
+                        stats_from: stats_from
                     });
                     return [4, request_1["default"].get(_pelotonApiUrlFor("/user/" + userId + "/workouts?" + workoutQueryParams), {
                             cookie: clientVariables.cookieString,
